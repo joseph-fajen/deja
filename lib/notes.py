@@ -57,3 +57,38 @@ def add_note_to_session(session_id: str, note: str) -> int:
     save_notes()
 
     return len(_notes_cache[session_id])
+
+
+def edit_note_in_session(session_id: str, index: int, new_text: str) -> str:
+    """
+    Edit a note by 1-based index. Returns the old note text.
+    Raises IndexError if index is out of range.
+    """
+    load_notes()
+
+    notes = _notes_cache.get(session_id, [])
+    if index < 1 or index > len(notes):
+        raise IndexError(f"Note index {index} out of range (1-{len(notes)})")
+
+    old_text = notes[index - 1]
+    _notes_cache[session_id][index - 1] = new_text
+    save_notes()
+
+    return old_text
+
+
+def delete_note_from_session(session_id: str, index: int) -> str:
+    """
+    Delete a note by 1-based index. Returns the deleted note text.
+    Raises IndexError if index is out of range.
+    """
+    load_notes()
+
+    notes = _notes_cache.get(session_id, [])
+    if index < 1 or index > len(notes):
+        raise IndexError(f"Note index {index} out of range (1-{len(notes)})")
+
+    deleted = _notes_cache[session_id].pop(index - 1)
+    save_notes()
+
+    return deleted
