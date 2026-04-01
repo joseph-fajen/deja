@@ -1,0 +1,34 @@
+# Déjà Feature Implementation Workflow
+# Usage: archon workflow run deja-implement --branch feat/X "task description"
+
+name: deja-implement
+description: |
+  Implement a feature or improvement for Déjà.
+
+  **Use when**: Implementing a well-defined feature from ROADMAP.md or a PRD
+  **NOT for**: Exploratory work, debugging, architectural discussions
+
+  **Produces**:
+  - Implementation code
+  - Tests (if applicable)
+  - Commit ready for PR
+
+steps:
+  # Step 1: Understand the task and plan implementation
+  - command: deja-plan
+
+  # Step 2: Implement the code
+  - command: deja-code
+    clearContext: true
+
+  # Step 3: Add tests if applicable
+  - command: deja-test
+    clearContext: true
+
+  # Step 4: Validate everything works
+  - command: deja-validate
+    clearContext: true
+
+  # Step 5: Commit the changes
+  - command: deja-commit
+    clearContext: true

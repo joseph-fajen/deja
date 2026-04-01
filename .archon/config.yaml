@@ -1,0 +1,13 @@
+# Déjà development configuration
+assistants:
+  claude:
+    model: sonnet  # Good balance for implementation tasks
+
+# Worktree settings for isolated development
+worktree:
+  baseBranch: main
+
+# Load bundled defaults plus our custom workflows
+defaults:
+  loadDefaultCommands: true
+  loadDefaultWorkflows: true
