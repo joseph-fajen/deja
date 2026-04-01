@@ -162,3 +162,60 @@ def test_delete_note_persists_to_disk(notes_mod):
         data = json.load(f)
 
     assert data["sess1"] == ["second"]
+
+
+# ---------------------------------------------------------------------------
+# load_notes: corrupt file handling
+# ---------------------------------------------------------------------------
+
+def test_load_notes_corrupt_file_creates_backup(notes_mod, tmp_path):
+    """Corrupt JSON is backed up rather than silently overwritten."""
+    with open(notes_mod.NOTES_PATH, 'w') as f:
+        f.write("{ not valid json }")
+
+    notes_mod.load_notes()
+
+    # Original corrupt file should be gone (renamed to backup)
+    assert not os.path.exists(notes_mod.NOTES_PATH)
+    # A .corrupt.* backup file should exist in the same directory
+    backups = [p for p in os.listdir(os.path.dirname(notes_mod.NOTES_PATH))
+               if '.corrupt.' in p]
+    assert len(backups) == 1
+
+
+def test_load_notes_corrupt_file_resets_to_empty(notes_mod):
+    """After a corrupt load, cache starts empty (no phantom notes)."""
+    with open(notes_mod.NOTES_PATH, 'w') as f:
+        f.write("not json")
+
+    notes_mod.load_notes()
+
+    assert notes_mod._notes_cache == {}
+
+
+# ---------------------------------------------------------------------------
+# save_notes: NotesSaveError on failure
+# ---------------------------------------------------------------------------
+
+def test_save_notes_raises_on_failure(notes_mod, monkeypatch):
+    """save_notes() raises NotesSaveError instead of silently failing."""
+    def bad_open(*args, **kwargs):
+        raise OSError("disk full")
+
+    monkeypatch.setattr("builtins.open", bad_open)
+
+    with pytest.raises(notes_mod.NotesSaveError):
+        notes_mod.save_notes()
+
+
+def test_edit_note_propagates_save_error(notes_mod, monkeypatch):
+    """edit_note_in_session raises NotesSaveError if save_notes fails."""
+    notes_mod.add_note_to_session("sess1", "note")
+
+    def always_fail():
+        raise notes_mod.NotesSaveError("disk full")
+
+    monkeypatch.setattr(notes_mod, "save_notes", always_fail)
+
+    with pytest.raises(notes_mod.NotesSaveError):
+        notes_mod.edit_note_in_session("sess1", 1, "new text")

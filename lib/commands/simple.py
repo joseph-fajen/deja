@@ -6,7 +6,7 @@ import os
 import glob as glob_module
 
 from config import CLAUDE_PROJECTS_PATH
-from notes import add_note_to_session, edit_note_in_session, delete_note_from_session
+from notes import NotesSaveError, add_note_to_session, edit_note_in_session, delete_note_from_session
 
 
 def note(session_id, note_text):
@@ -26,7 +26,7 @@ def edit_note(session_id: str, index: int, new_text: str):
     """Edit a note by 1-based index"""
     try:
         old_text = edit_note_in_session(session_id, index, new_text)
-    except IndexError as e:
+    except (IndexError, NotesSaveError) as e:
         return str(e), {'success': False, 'error': str(e)}
 
     summary_line = f"Edited note {index} on {session_id[:8]}"
@@ -43,7 +43,7 @@ def delete_note(session_id: str, index: int):
     """Delete a note by 1-based index"""
     try:
         deleted_text = delete_note_from_session(session_id, index)
-    except IndexError as e:
+    except (IndexError, NotesSaveError) as e:
         return str(e), {'success': False, 'error': str(e)}
 
     summary_line = f"Deleted note {index} from {session_id[:8]}"

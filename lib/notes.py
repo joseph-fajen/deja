@@ -5,9 +5,14 @@ Notes storage - breadcrumbs left on sessions for future searches.
 import os
 import sys
 import json
+import time
 from typing import Dict, List
 
 from config import NOTES_PATH
+
+
+class NotesSaveError(Exception):
+    pass
 
 
 # In-memory cache
@@ -24,6 +29,14 @@ def load_notes():
         if os.path.exists(NOTES_PATH):
             with open(NOTES_PATH, 'r') as f:
                 _notes_cache = json.load(f)
+    except json.JSONDecodeError as e:
+        backup = f"{NOTES_PATH}.corrupt.{int(time.time())}"
+        try:
+            os.rename(NOTES_PATH, backup)
+            print(f"Warning: notes file was corrupt, backed up to {backup}", file=sys.stderr)
+        except OSError:
+            print(f"Warning: notes file is corrupt and could not be backed up: {e}", file=sys.stderr)
+        _notes_cache = {}
     except Exception as e:
         print(f"Error loading notes: {e}", file=sys.stderr)
         _notes_cache = {}
@@ -37,7 +50,7 @@ def save_notes():
         with open(NOTES_PATH, 'w') as f:
             json.dump(_notes_cache, f, indent=2)
     except Exception as e:
-        print(f"Error saving notes: {e}", file=sys.stderr)
+        raise NotesSaveError(f"Failed to save notes: {e}") from e
 
 
 def get_notes_for_session(session_id: str) -> List[str]:
