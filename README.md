@@ -43,7 +43,9 @@ deja <session>              # Session overview (episodes, todos, work)
 deja <session>:2            # Read episode 2
 deja <session>@3            # Read around turn 3
 deja <session>.15           # Get message 15
-deja <session> +note "..."  # Leave a breadcrumb
+deja <session> +note "..."      # Add a note
+deja <session> =note N "..."   # Edit note at index N (1-based)
+deja <session> -note N         # Delete note at index N (1-based)
 deja --help                 # Usage reference
 ```
 

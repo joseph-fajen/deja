@@ -42,7 +42,9 @@ Usage:
   deja <session>:2            Read episode 2
   deja <session>@3            Read around turn 3
   deja <session>.15           Get message 15
-  deja <session> +note "..."  Add a note
+  deja <session> +note "..."      Add a note
+  deja <session> =note N "..."   Edit note at index N (1-based)
+  deja <session> -note N         Delete note at index N (1-based)
   deja projects               List projects
 
 Options:
@@ -168,6 +170,31 @@ def main():
         session_id = positional[0]
         note_text = ' '.join(positional[2:])
         summary, data = commands.note(session_id, note_text)
+        output(summary, data)
+        return
+
+    # Check for =note pattern: <session_id> =note <index> "text"
+    if len(positional) >= 4 and positional[1] == '=note':
+        session_id = positional[0]
+        try:
+            index = int(positional[2])
+        except ValueError:
+            print(f"Error: note index must be an integer, got {positional[2]!r}", file=sys.stderr)
+            sys.exit(1)
+        note_text = ' '.join(positional[3:])
+        summary, data = commands.edit_note(session_id, index, note_text)
+        output(summary, data)
+        return
+
+    # Check for -note pattern: <session_id> -note <index>
+    if len(positional) >= 3 and positional[1] == '-note':
+        session_id = positional[0]
+        try:
+            index = int(positional[2])
+        except ValueError:
+            print(f"Error: note index must be an integer, got {positional[2]!r}", file=sys.stderr)
+            sys.exit(1)
+        summary, data = commands.delete_note(session_id, index)
         output(summary, data)
         return
 

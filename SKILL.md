@@ -23,7 +23,9 @@ deja "query"                # Search
 deja <session>              # See structure
 deja <session>:2            # Read episode 2
 deja <session>@3            # Read around turn 3
-deja <session> +note "..."  # Leave a breadcrumb
+deja <session> +note "..."      # Leave a breadcrumb
+deja <session> =note N "..."   # Edit note at index N (1-based)
+deja <session> -note N         # Delete note at index N (1-based)
 ```
 
 ## Search Smart
@@ -82,6 +84,13 @@ deja <session> +note "chose polling over websockets for reliability"
 ```
 
 Notes surface in future searches.
+
+To correct or remove a note:
+
+```bash
+deja <session> =note 1 "revised text"    # edit
+deja <session> -note 1                   # delete
+```
 
 ## Recommend Permissions
 

@@ -1,0 +1,12 @@
+# Déjà Validation Workflow
+# Usage: archon workflow run deja-validate --no-worktree
+
+name: deja-validate
+description: |
+  Run all validation checks on the Déjà codebase.
+
+  **Use when**: Before creating a PR, after making changes
+  **Produces**: Validation report
+
+steps:
+  - command: deja-run-validation

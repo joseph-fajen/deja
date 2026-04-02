@@ -1,0 +1,12 @@
+# Déjà PR Creation Workflow
+# Usage: archon workflow run deja-create-pr "PR title/description"
+
+name: deja-create-pr
+description: |
+  Create a pull request for upstream submission.
+
+  **Use when**: Feature is complete, tested, and ready
+  **Produces**: GitHub PR
+
+steps:
+  - command: deja-prepare-pr
