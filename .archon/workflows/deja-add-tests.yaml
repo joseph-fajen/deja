@@ -1,0 +1,29 @@
+# Déjà Test Addition Workflow
+# Usage: archon workflow run deja-add-tests --branch test/X "module to test"
+
+name: deja-add-tests
+description: |
+  Add tests to an existing Déjà module.
+
+  **Use when**: Adding test coverage to untested code
+  **NOT for**: Implementing new features (use deja-implement)
+
+  **Produces**:
+  - pytest test file(s)
+  - Commit with tests
+
+steps:
+  # Step 1: Analyze the module to understand what to test
+  - command: deja-analyze-for-tests
+
+  # Step 2: Write the tests
+  - command: deja-write-tests
+    clearContext: true
+
+  # Step 3: Run tests and fix any issues
+  - command: deja-run-tests
+    clearContext: true
+
+  # Step 4: Commit the test suite
+  - command: deja-commit
+    clearContext: true
