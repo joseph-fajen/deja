@@ -103,11 +103,6 @@ def test_edit_note_index_too_large_raises(notes_mod):
 
 
 def test_edit_note_on_empty_session_raises(notes_mod):
-    with pytest.raises(IndexError):
-        notes_mod.edit_note_in_session("empty_sess", 1, "x")
-
-
-def test_edit_note_on_empty_session_message(notes_mod):
     with pytest.raises(IndexError, match="Session has no notes"):
         notes_mod.edit_note_in_session("empty_sess", 1, "x")
 
@@ -166,11 +161,6 @@ def test_delete_note_index_too_large_raises(notes_mod):
 
 
 def test_delete_note_on_empty_session_raises(notes_mod):
-    with pytest.raises(IndexError):
-        notes_mod.delete_note_from_session("empty_sess", 1)
-
-
-def test_delete_note_on_empty_session_message(notes_mod):
     with pytest.raises(IndexError, match="Session has no notes"):
         notes_mod.delete_note_from_session("empty_sess", 1)
 

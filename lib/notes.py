@@ -75,7 +75,9 @@ def add_note_to_session(session_id: str, note: str) -> int:
 def edit_note_in_session(session_id: str, index: int, new_text: str) -> str:
     """
     Edit a note by 1-based index. Returns the old note text.
-    Raises IndexError if index is out of range.
+
+    Raises IndexError if the session has no notes, or if index is out of
+    range (1-based, inclusive).
     """
     load_notes()
 
@@ -95,7 +97,9 @@ def edit_note_in_session(session_id: str, index: int, new_text: str) -> str:
 def delete_note_from_session(session_id: str, index: int) -> str:
     """
     Delete a note by 1-based index. Returns the deleted note text.
-    Raises IndexError if index is out of range.
+
+    Raises IndexError if the session has no notes, or if index is out of
+    range (1-based, inclusive).
     """
     load_notes()
 
