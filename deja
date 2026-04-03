@@ -176,7 +176,11 @@ def main():
         return
 
     # Check for =note pattern: <session_id> =note <index> "text"
-    if len(positional) >= 4 and positional[1] == '=note':
+    if len(positional) >= 2 and positional[1] == '=note':
+        if len(positional) < 4:
+            print('Error: =note requires an index and replacement text', file=sys.stderr)
+            print('Usage: deja <session> =note <index> "replacement text"', file=sys.stderr)
+            sys.exit(1)
         session_id = positional[0]
         try:
             index = int(positional[2])
