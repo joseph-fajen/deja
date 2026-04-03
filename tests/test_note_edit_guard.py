@@ -26,14 +26,14 @@ def test_note_edit_missing_text_exits_nonzero():
 
 def test_note_edit_missing_index_prints_error():
     result = run_deja('somesession', '=note')
-    assert 'Error: =note requires an index and replacement text' in result.stdout
+    assert 'Error: =note requires an index and replacement text' in result.stderr
 
 
 def test_note_edit_missing_index_prints_usage():
     result = run_deja('somesession', '=note')
-    assert 'Usage:' in result.stdout
+    assert 'Usage:' in result.stderr
 
 
 def test_note_edit_missing_text_prints_error():
     result = run_deja('somesession', '=note', '3')
-    assert 'Error: =note requires an index and replacement text' in result.stdout
+    assert 'Error: =note requires an index and replacement text' in result.stderr
