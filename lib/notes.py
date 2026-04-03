@@ -80,6 +80,8 @@ def edit_note_in_session(session_id: str, index: int, new_text: str) -> str:
     load_notes()
 
     notes = _notes_cache.get(session_id, [])
+    if not notes:
+        raise IndexError("Session has no notes")
     if index < 1 or index > len(notes):
         raise IndexError(f"Note index {index} out of range (1-{len(notes)})")
 
@@ -98,6 +100,8 @@ def delete_note_from_session(session_id: str, index: int) -> str:
     load_notes()
 
     notes = _notes_cache.get(session_id, [])
+    if not notes:
+        raise IndexError("Session has no notes")
     if index < 1 or index > len(notes):
         raise IndexError(f"Note index {index} out of range (1-{len(notes)})")
 
