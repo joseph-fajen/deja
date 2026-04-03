@@ -90,6 +90,12 @@ def test_edit_note_index_zero_raises(notes_mod):
         notes_mod.edit_note_in_session("sess1", 0, "x")
 
 
+def test_edit_note_negative_index_raises(notes_mod):
+    notes_mod.add_note_to_session("sess1", "note")
+    with pytest.raises(IndexError):
+        notes_mod.edit_note_in_session("sess1", -1, "x")
+
+
 def test_edit_note_index_too_large_raises(notes_mod):
     notes_mod.add_note_to_session("sess1", "only note")
     with pytest.raises(IndexError):
@@ -140,6 +146,12 @@ def test_delete_note_index_zero_raises(notes_mod):
     notes_mod.add_note_to_session("sess1", "note")
     with pytest.raises(IndexError):
         notes_mod.delete_note_from_session("sess1", 0)
+
+
+def test_delete_note_negative_index_raises(notes_mod):
+    notes_mod.add_note_to_session("sess1", "note")
+    with pytest.raises(IndexError):
+        notes_mod.delete_note_from_session("sess1", -1)
 
 
 def test_delete_note_index_too_large_raises(notes_mod):
